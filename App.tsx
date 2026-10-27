@@ -1,4 +1,9 @@
-// App is the whole app. Start here.
-export default function App() {
-  return <h1>My app</h1>;
+function App() {
+  return (
+    <div>
+      <h1>Plant Water Planner</h1>
+    </div>
+  );
 }
+
+export default App;
