@@ -1,1 +1,23 @@
-/* Your styles go here */
+/* Keep padding inside each element's width */
+
+{ box-sizing: border-box; }
+
+/* Page styling */ body { margin: 0; font-family: Arial, sans-serif; background: #f4f9f1; color: #2e4a2f; }
+
+/* Main app container */ .app { max-width: 480px; margin: 0 auto; padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; }
+
+/* Main heading */ h1 { text-align: center; font-size: 26px; margin: 0 0 8px; }
+
+/* Section headings */ h2 { font-size: 18px; margin: 0 0 12px; }
+
+/* Panel styling */ .panel { background: #ffffff; padding: 18px; border-radius: 12px; }
+
+/* Plant form styling */ .plant-form { background: #ffffff; padding: 18px; border-radius: 12px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Input fields */ .plant-form input { width: 100%; padding: 12px; border: 1px solid #c5d9bf; border-radius: 8px; font-size: 14px; color: #2e4a2f; }
+
+/* Input focus */ .plant-form input:focus { outline: 2px solid #81b879; border-color: #4caf50; }
+
+/* Add plant button */ button { padding: 12px; background: #388e3c; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: bold; }
+
+/* Button hover effect */ button:hover { background: #2e7d32; }
