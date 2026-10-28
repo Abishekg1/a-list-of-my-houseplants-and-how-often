@@ -4,7 +4,7 @@ interface Plant { id: string; name: string; intervalDays: number; nextWaterDate:
 
 function formatDate(date: Date): string { const year = date.getFullYear(); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0');
 
-return `${year}-${month}-${day}`;}
+return `${year}-${month}-${day}`; }
 
 function todayString(): string { return formatDate(new Date()); }
 
@@ -53,15 +53,15 @@ return ( <form className="plant-form" onSubmit={handleSubmit}> <input type="text
 
 ); }
 
-interface PlantListProps { title: string; plants: Plant[]; emptyText: string; }
+interface PlantListProps { title: string; plants: Plant[]; emptyText: string; onWater: (id: string) => void; }
 
-function PlantList({ title, plants, emptyText }: PlantListProps) { return ( <section className="panel"> <h2>{title}</h2>
+function PlantList({ title, plants, emptyText, onWater, }: PlantListProps) { return ( <section className="panel"> <h2>{title}</h2>
 
   {plants.length === 0 ? (
     <p className="empty">{emptyText}</p>
   ) : (
     <ul className="plant-list">
-      {plants.map((plant) => (
+      {plants.map((plant: Plant) => (
         <li key={plant.id} className="plant-item">
           <div>
             <strong>{plant.name}</strong>
@@ -70,6 +70,13 @@ function PlantList({ title, plants, emptyText }: PlantListProps) { return ( <sec
               {plant.nextWaterDate}
             </span>
           </div>
+
+          <button
+            type="button"
+            onClick={() => onWater(plant.id)}
+          >
+            Mark watered
+          </button>
         </li>
       ))}
     </ul>
@@ -81,6 +88,8 @@ function PlantList({ title, plants, emptyText }: PlantListProps) { return ( <sec
 
 export default function App() { const [plants, setPlants] = useState<Plant[]>([]); const today = todayString();
 
+const duePlants = plants.filter( (plant: Plant) => plant.nextWaterDate <= today );
+
 function addPlant(name: string, intervalDays: number) { const newPlant: Plant = { id: `${Date.now()}-${Math.random()}`, name, intervalDays, nextWaterDate: today, };
 
 setPlants((current: Plant[]) => [...current, newPlant]);
@@ -88,20 +97,24 @@ setPlants((current: Plant[]) => [...current, newPlant]);
 
 }
 
+function waterPlant(id: string) { setPlants((current: Plant[]) => current.map((plant: Plant) => plant.id === id ? { ...plant, nextWaterDate: addDays( plant.nextWaterDate, plant.intervalDays ), } : plant ) ); }
+
 return ( <main className="app"> <h1>Plant Water Planner</h1>
 
   <PlantForm onAdd={addPlant} />
 
   <PlantList
     title="Water today"
-    plants={[]}
+    plants={duePlants}
     emptyText="Nothing needs water today."
+    onWater={waterPlant}
   />
 
   <PlantList
     title="All my plants"
     plants={plants}
     emptyText="No plants yet. Add one above."
+    onWater={waterPlant}
   />
 </main>
 
