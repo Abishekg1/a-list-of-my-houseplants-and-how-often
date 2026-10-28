@@ -13,3 +13,8 @@ button:hover { background: #3a6b2c; }
 .plant-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 
 .plant-item { padding: 10px; border: 1px solid #dcebd3; border-radius: 8px; }
+.plant-item { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px; border: 1px solid #dcebd3; border-radius: 8px; }
+
+.plant-item div { display: flex; flex-direction: column; gap: 4px; }
+
+.plant-item span { font-size: 13px; color: #5f7d5a; }
