@@ -28,7 +28,7 @@ The App component uses that information to show all my plants and which ones nee
 One surprise I fixed was a code error caused by missing backticks in a date function. 
 I also made sure my plants stay saved when I reload the page.
 Next, I would like to add plant photos and watering reminders.
-Why a server
+##Why a server
 
 The Plant Water Planner stores plants in the browser's localStorage under the key plant-water-planner. LocalStorage belongs to a specific browser and website origin, so another browser or private window has its own separate storage. 
 That is why a Fern saved in one browser does not automatically appear in another.

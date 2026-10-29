@@ -1,7 +1,7 @@
 {
-  "name": "workspace",
+  "name": "plant-water-planner",
   "version": "1.0.0",
-  "description": "What it does",
+  "description": "An app to track plants and manage their watering schedules.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
