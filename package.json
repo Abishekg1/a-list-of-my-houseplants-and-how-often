@@ -1,12 +1,20 @@
 {
   "name": "plant-water-planner",
   "version": "1.0.0",
-  "description": "An app to track plants and manage their watering schedules.",
-  "main": "index.js",
+  "description": "A plant watering planner that helps users track plants and their watering schedules.",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.js"
   },
-  "keywords": [],
+  "keywords": [
+    "plants",
+    "watering",
+    "planner"
+  ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }

@@ -1,4 +1,3 @@
-
  // Formats a Date as YYYY-MM-DD using local time
 export function formatDate(date: Date): string {
   const year = date.getFullYear();

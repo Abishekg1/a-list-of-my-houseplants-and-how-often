@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "name": "Fern",
+    "nextWaterDate": "2026-10-31",
+    "intervalDays": 7
+  },
+  {
+    "id": "2",
+    "name": "Snake Plant",
+    "nextWaterDate": "2026-11-02",
+    "intervalDays": 14
+  }
+]

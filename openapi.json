@@ -1,0 +1,142 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Plant Water Planner API",
+    "version": "1.0.0",
+    "description": "API for managing plant watering schedules."
+  },
+  "paths": {
+    "/api/plants": {
+      "get": {
+        "summary": "List your plants",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": []
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a plant",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "name": "Basil",
+                "intervalDays": 2
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "123",
+                  "name": "Basil",
+                  "intervalDays": 2,
+                  "nextWaterDate": "2026-10-30"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Please type a plant name"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Days must be 1 or more"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/plants/{id}": {
+      "put": {
+        "summary": "Update a plant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "name": "Fern",
+                "intervalDays": 4,
+                "nextWaterDate": "2025-01-05"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Plant updated successfully"
+          },
+          "404": {
+            "description": "Plant not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Plant not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a plant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Plant deleted successfully"
+          },
+          "404": {
+            "description": "Plant not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Plant not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

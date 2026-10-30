@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { todayString, addDays } from './dates';
+import { getPlants, addPlant, updatePlant } from './api';
 
 interface Plant {
   id: string;
@@ -9,28 +9,11 @@ interface Plant {
   nextWaterDate: string;
 }
 
-const STORAGE_KEY = 'plant-water-planner';
-
-// Loads saved plants from localStorage, or returns an empty list if none exist
-function loadPlants(): Plant[] {
-  const saved = localStorage.getItem(STORAGE_KEY);
-
-  if (saved === null) {
-    return [];
-  }
-
-  try {
-    return JSON.parse(saved) as Plant[];
-  } catch {
-    return [];
-  }
-}
-
 interface PlantFormProps {
   onAdd: (name: string, intervalDays: number) => void;
 }
 
-// Form where the user enters a plant name and watering interval
+// Form for adding a plant
 function PlantForm({ onAdd }: PlantFormProps) {
   const [name, setName] = useState<string>('');
   const [intervalText, setIntervalText] = useState<string>('');
@@ -58,7 +41,6 @@ function PlantForm({ onAdd }: PlantFormProps) {
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           setName(event.target.value)
         }
-        required
       />
 
       <input
@@ -69,7 +51,6 @@ function PlantForm({ onAdd }: PlantFormProps) {
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           setIntervalText(event.target.value)
         }
-        required
       />
 
       <button type="submit">Add plant</button>
@@ -84,7 +65,7 @@ interface PlantListProps {
   onWater: (id: string) => void;
 }
 
-// Displays a list of plants and their next watering dates
+// Displays a list of plants
 function PlantList({
   title,
   plants,
@@ -125,12 +106,56 @@ function PlantList({
 
 // Main application
 export default function App() {
-  const [plants, setPlants] = useState<Plant[]>(loadPlants);
+  const [plants, setPlants] = useState<Plant[]>([]);
 
-  // Save plants whenever the list changes
+  // Load plants from the server
+  async function refresh() {
+    try {
+      const updatedPlants = await getPlants();
+      setPlants(updatedPlants);
+    } catch (error) {
+      console.error('Failed to load plants:', error);
+    }
+  }
+
+  // Load plants when the page opens
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
-  }, [plants]);
+    refresh();
+  }, []);
+
+  // Add a new plant through the server
+  async function handleAdd(name: string, intervalDays: number) {
+    try {
+      await addPlant(name, intervalDays);
+      await refresh();
+    } catch (error) {
+      console.error('Failed to add plant:', error);
+    }
+  }
+
+  // Update a plant's next watering date
+  async function waterPlant(id: string) {
+    try {
+      const plant = plants.find((item) => item.id === id);
+
+      if (!plant) {
+        return;
+      }
+
+      const updatedPlant: Plant = {
+        ...plant,
+        nextWaterDate: addDays(
+          plant.nextWaterDate,
+          plant.intervalDays
+        ),
+      };
+
+      await updatePlant(updatedPlant);
+      await refresh();
+    } catch (error) {
+      console.error('Failed to update plant:', error);
+    }
+  }
 
   const today = todayString();
 
@@ -138,40 +163,11 @@ export default function App() {
     (plant: Plant) => plant.nextWaterDate <= today
   );
 
-  // Add a plant with its first watering due today
-  function addPlant(name: string, intervalDays: number) {
-    const newPlant: Plant = {
-      id: `${Date.now()}-${Math.random()}`,
-      name,
-      intervalDays,
-      nextWaterDate: todayString(),
-    };
-
-    setPlants((current: Plant[]) => [...current, newPlant]);
-  }
-
-  // Move the next watering date forward by the plant's interval
-  function waterPlant(id: string) {
-    setPlants((current: Plant[]) =>
-      current.map((plant: Plant) =>
-        plant.id === id
-          ? {
-              ...plant,
-              nextWaterDate: addDays(
-                plant.nextWaterDate,
-                plant.intervalDays
-              ),
-            }
-          : plant
-      )
-    );
-  }
-
   return (
     <main className="app">
       <h1>Plant Water Planner</h1>
 
-      <PlantForm onAdd={addPlant} />
+      <PlantForm onAdd={handleAdd} />
 
       <PlantList
         title="Water today"
